@@ -1,0 +1,53 @@
+{extend name="common/layout"/}
+{block name="head"} {include file="system/head" /}{/block}
+{block name="main"}
+<div class="block block-rounded">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">{$webTitle}</h3>
+        <div class="mb-0">
+            <button type="submit" class="btn btn-sm btn-alt-primary" onclick="ajax_edit_config();">
+                <i class="fa fa-save opacity-50 me-1"></i> 保存
+            </button>
+        </div>
+    </div>
+    <div class="block-content">
+        <form onsubmit="return false;" id="reg-form">
+            <div class="row push">
+                <div class="col-lg-4">
+                    <p class="text-muted">
+                        你可以在这里配置注册需要赠送的东西
+                    </p>
+                </div>
+                <div class="col-lg-8 col-xl-5">
+                    <div class="mb-4">
+                        <label class="form-label">赠送类型</label>
+                        <select class="form-select" id="reg_give_type" name="reg_give_type" default="{:config('sys.reg_give_type')}">
+                            <option value="0">关闭</option>
+                            <option value="1" {if condition="config('sys.reg_give_type') eq 1" }selected {/if}>VIP</option>
+                            <option value="2" {if condition="config('sys.reg_give_type') eq 2" }selected {/if}>配额</option>
+                            <option value="3" {if condition="config('sys.reg_give_type') eq 3" }selected {/if}>余额</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="reg_give_value">赠送面值</label>
+                        <input type="text" class="form-control" id="reg_give_value" name="reg_give_value" value="{:config('sys.reg_give_value')}" placeholder="输入赠送的面值">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+{block name="foot"}
+<script>
+    function ajax_edit_config() {
+        x.ajax('/admin/ajax/set/config', $('#reg-form').serialize(), function (data) {
+            if (data.code == 1) {
+                x.notify(data.message, 'success');
+            } else {
+                x.notify(data.message, 'warning');
+            }
+        })
+    }
+</script>
+{/block}

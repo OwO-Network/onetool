@@ -1,0 +1,80 @@
+<!--
+ * @Author: Vincent Young
+ * @Date: 2022-03-13 15:30:50
+ * @LastEditors: Vincent Young
+ * @LastEditTime: 2023-03-06 19:07:56
+ * @FilePath: /onetool/app/admin/view/system/update.html
+ * @Telegram: https://t.me/missuo
+ * 
+ * Copyright © 2023 by Vincent, All Rights Reserved. 
+-->
+{extend name="common/layout"/}
+{block name="head"} {include file="system/head" /}{/block}
+{block name="main"}
+{php}
+    $version = \think\facade\Config::get('app')['app_ver'];
+    $authcode = \think\facade\Config::get('authcode')['authcode'];
+    <!-- $check_url = file_get_contents("https://auth.onetool.cc/check.php?url=" . $_SERVER['HTTP_HOST'] . "&authcode=" . $authcode . "&ver=" . $version); -->
+    <!-- $arr = json_decode($check_url, true); -->
+{/php}
+<div class="block block-rounded">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">系统更新</h3>
+        <div class="block-options">
+            {if condition="$arr.version eq $version"}
+            <div class="block-options-item">
+                <div class="alert alert-success py-2 mb-0 small">
+                    <i class="fa fa-check-circle opacity-50 me-1"></i> 你已经是最新版本
+                </div>
+            </div>
+            {else /}
+            <button type="submit" class="btn btn-alt-primary btn-sm" onclick="ajax_system_update('{$arr.file}');">
+                <i class="fa fa-hand-point-up opacity-50 me-1"></i> 更新至最新版本
+            </button>
+            {/if}
+        </div>
+    </div>
+
+    <div class="block-content">
+        <ul class="list list-activity">
+            <li class="timeline-event">
+                <i class="far fa-dot-circle text-info"></i>
+                <div class="fw-semibold text-flat">{$arr.ver}◂</div>
+                <div class="mt-1">
+                    {volist name="$arr.changelog" id="value"}
+                    <p class="mb-0">{$key}.{$value}</p>
+                    {/volist}
+                </div>
+                <div class="fs-xs text-muted">{$arr.uptime}</div>
+            </li>
+<!--            <li class="timeline-event">-->
+<!--                <i class="far fa-dot-circle text-info"></i>-->
+<!--                <div class="fw-semibold text-pulse-light">v1.0.0-version</div>-->
+<!--                <div class="mt-1">-->
+<!--                    <p class="mb-0 text-danger fw-bold">最新售后群号：912478399</p>-->
+<!--                    <p class="mb-0">1.[优化]修复系统支付对接错误</p>-->
+<!--                    <p class="mb-0">2.[新增]福利配置增加玖伍/时空云对接</p>-->
+<!--                </div>-->
+<!--                <div class="fs-xs text-muted">2022-01-28 22:59:11</div>-->
+<!--            </li>-->
+        </ul>
+    </div>
+</div>
+{/block}
+{block name="foot"}
+<script>
+    function ajax_system_update(file)
+    {
+        x.ajax('/admin/ajax/update', {file: file}, function (data) {
+            if (data.code == 1) {
+                x.notify(data.message, 'success');
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000)
+            } else {
+                x.notify(data.message);
+            }
+        });
+    }
+</script>
+{/block}

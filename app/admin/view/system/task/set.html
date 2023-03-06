@@ -1,0 +1,40 @@
+{extend name="common/layout"/}
+{block name="head"} {include file="system/head" /}{/block}
+{block name="main"}
+<div class="row">
+    <div class="col-md-12">
+        <div class="block block-rounded">
+            <div class="block-header block-header-default" onclick="ajax_edit_config();">
+                <h3 class="block-title">系统任务配置</h3>
+                <div class="block-options">
+                    <button type="submit" class="btn btn-sm btn-alt-primary">
+                        <i class="fa fa-save opacity-50 me-1"></i> 保存
+                    </button>
+                </div>
+            </div>
+            <div class="block-content">
+                <form onsubmit="return false;" id="task-form">
+                    <div class="mb-4">
+                        <label class="form-label" for="cronkey">监控文件运行密钥</label>
+                        <input type="text" class="js-maxlength form-control " id="cronkey" name="cronkey" placeholder="..." value="{:config('sys.cronkey')}">
+                        <div class="form-text text-muted fs-sm">默认为空。设置密钥后，你需要在所有监控文件后面加上 <u>?key=你的密钥</u> 可防止监控文件被恶意执行</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="foot"}
+<script>
+    function ajax_edit_config() {
+        x.ajax('/admin/ajax/set/config', $('#task-form').serialize(), function (data) {
+            if (data.code == 1) {
+                x.notify(data.message, 'success');
+            } else {
+                x.notify(data.message, 'warning');
+            }
+        })
+    }
+</script>
+{/block}

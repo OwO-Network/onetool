@@ -1,0 +1,138 @@
+{extend name="common/layout"/}
+{block name="head"} {include file="console/head" /}{/block}
+{block name="main"}
+<style>
+    p {
+        display:inline;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="fs-lg p-4 bg-earth rounded text-white text-center push">
+            <div class="mb-2">
+                <i class="fa fa-2x fa-gift opacity-50"></i>
+            </div>
+            <h4 class="mb-1">
+                欢迎来到 {:config('web.webname')} !
+            </h4>
+            <p class="fs-sm fw-medium text-white mb-0">
+                你的{:config('web.webname')}，不仅仅是<strong>{:config('web.webname')}</strong>
+            </p>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <a class="block block-rounded block-link-pop text-end" href="javascript:void(0)">
+            <div class="block-content block-content-full d-sm-flex justify-content-between align-items-center border-black-op-b border-3">
+                <div class="d-none d-sm-block">
+                    <i class="si si-bar-chart fa-2x text-primary-light"></i>
+                </div>
+                <div class="text-end">
+                    <div class="fs-3 fw-semibold text-primary">{$user_count}</div>
+                    <div class="fs-sm fw-semibold text-uppercase text-muted">用户数量</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-xl-3">
+        <a class="block block-rounded block-link-pop text-end" href="javascript:void(0)">
+            <div class="block-content block-content-full d-sm-flex justify-content-between align-items-center border-black-op-b border-3">
+                <div class="d-none d-sm-block">
+                    <i class="si si-trophy fa-2x text-earth-light"></i>
+                </div>
+                <div class="text-end">
+                    <div class="fs-3 fw-semibold text-earth">{$task_count}</div>
+                    <div class="fs-sm fw-semibold text-uppercase text-muted">系统任务</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-xl-3">
+        <a class="block block-rounded block-link-pop text-end" href="javascript:void(0)">
+            <div class="block-content block-content-full d-sm-flex justify-content-between align-items-center border-black-op-b border-3">
+                <div class="d-none d-sm-block">
+                    <i class="si si-bar-chart fa-2x text-elegance-light"></i>
+                </div>
+                <div class="text-end">
+                    <div class="fs-3 fw-semibold text-elegance">{$job_count}</div>
+                    <div class="fs-sm fw-semibold text-uppercase text-muted">添加任务</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-xl-3">
+        <a class="block block-rounded block-link-pop text-end" href="javascript:void(0)">
+            <div class="block-content block-content-full d-sm-flex justify-content-between align-items-center border-black-op-b border-3">
+                <div class="d-none d-sm-block">
+                    <i class="si si-fire fa-2x text-corporate-light"></i>
+                </div>
+                <div class="text-end">
+                    <div class="fs-3 fw-semibold text-pulse">{$execute_count}</div>
+                    <div class="fs-sm fw-semibold text-uppercase text-muted">运行次数</div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-8 mb-2">
+        <div class="block block-rounded mb-0">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">公告通知</h3>
+            </div>
+            <div class="block-content block-content-full" data-toggle="slimscroll" data-height="232px">
+                <div class="fw-medium fs-sm">
+                    {volist name="$notice" id="arr"}
+                    <div class="border-start border-4 rounded-2 border-primary mb-2">
+                        <div class="rounded p-2 text-pulse-light">
+                            <p class="m-1">{:htmlspecialchars_decode($arr.content)}</p>
+                            <br/>
+                            <p class="m-2 text-muted">{:date("Y-m-d H:i", $arr.addtime)}</p>
+                        </div>
+                    </div>
+                    {/volist}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="#">
+            <div class="block-content bg-gd-dusk">
+                <div class="push">
+                    <img class="img-avatar img-avatar-thumb" src="//q2.qlogo.cn/g?b=qq&nk={:session('user.qq')}&s=100" alt="">
+                </div>
+                <div class="pull-x pull-b py-2 bg-black-25">
+                    <div class="fw-semibold mb-1 text-white">
+                      <i class="fa fa-star text-white-75 ms-1"></i> {:session('user.nickname')}
+                        <span class="fs-xs">UID: {:session('user.uid')}</span>
+                    </div>
+                    {if session('user.vip_start')}
+                    <div class="fs-sm text-white-75">VIP会员 - {:session('user.vip_end')}</div>
+                    {else /}
+                    <div class="fs-sm text-white-75">普通用户</div>
+                    {/if}
+                    <div class="fs-sm text-white-75">共有 {:session('user.quota')} 个配额 | 已使用 ： {$quota_used} 个</div>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="row items-push text-center">
+                    <div class="col-6">
+                        <div class="mb-1"><i class="si si-user fa-2x"></i></div>
+                        <div class="fs-sm fw-medium text-muted">{$agent}</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-1"><i class="si si-wallet fa-2x"></i></div>
+                        <div class="fs-sm fw-medium text-muted">{:session('user.money')} 元</div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{/block}
+{block name="foot"}
+<script>
+    $(function () {
+        jQuery(function(){Codebase.helpers('jq-slimscroll');});
+    })
+</script>
+{/block}
